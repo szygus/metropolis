@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metropolis AI - System optymalizacji komunikacji</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            background-color: #f5f5f0;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Landing Page - zmodyfikowany styl aby pasował do głównego interfejsu */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 0;
+            position: relative;
+            overflow-y: auto;
+        }
+        
+        /* Nowy header bar podobny do drugiej zakładki */
+        .landing-header-bar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        
+        .landing-header-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .landing-back-btn {
+            padding: 8px 16px;
+            background-color: white;
+            color: #2c3e50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        
+        .landing-back-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .landing-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 40px 20px 40px;
+        }
+        
+        .logo-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            -webkit-text-stroke: 2px black;
+            color: transparent;
+            text-align: center;
+        }
+        
+        .logo-subtitle {
+            font-size: 2.5rem;
+            text-align: center;
+            -webkit-text-stroke: 1px black;
+            color: transparent;
+            margin-bottom: 30px;
+        }
+        
+        /* Nowy styl przycisku, teraz centralnie pod tytułem */
+        .explore-btn {
+            padding: 12px 24px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 20px auto 40px auto;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            width: fit-content;
+        }
+        
+        .explore-btn:hover {
+            background-color: #1a2530;
+        }
+        
+        /* Jedna większa grafika zamiast dwóch mniejszych */
+        .transport-image {
+            max-width: 80%;
+            height: auto;
+            margin: 20px auto 30px;
+            display: block;
+        }
+        
+        /* PDF Content Sections */
+        .pdf-content {
+            margin: 20px 40px 40px 40px;
+        }
+        
+        .pdf-section {
+            margin-bottom: 50px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .section-content p {
+            margin-bottom: 15px;
+        }
+        
+        .question-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+        
+        .question-list li {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .team-member {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .team-member:last-child {
+            border-bottom: none;
+        }
+        
+        .team-contact {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Landing Page (PDF representation) -->
+        <div class="landing-page" id="landing-page">
+            <!-- Nowy header bar podobny do drugiej zakładki -->
+            <div class="landing-header-bar">
+                <h1 class="landing-header-title">Metropolis AI - System wspomagania decyzji</h1>
+            </div>
+            
+            <div class="landing-header">
+         
+                
+                <!-- Przycisk umieszczony bezpośrednio pod tytułem, przed obrazkami -->
+                <a href="https://metropolisai.pl/system" class="explore-btn" id="explore-btn">Odkryj funkcjonalności</a>
+                
+                <!-- Jedna duża grafika zamiast dwóch mniejszych -->
+                <img class="transport-image" src="grafika.jpg" alt="Transport miejski" width="800" height="300">
+           
+            </div>
+                    
+            <div class="pdf-content">
+                <!-- PDF Page 2: Opis produktu -->
+                <div class="pdf-section">
+                    <h2 class="section-title">Opis produktu</h2>
+                    <div class="section-content">
+                        <p>Metropolis AI to system przewidujący skutki podejmowanych decyzji związanych z komunikacją miejską.</p>
+                        
+                        <ul class="question-list">
+                            <li>Jaki wpływ na zapełnienie autobusów będzie miało usunięcie istniejących linii?</li>
+                            <li>Jakie będzie wykorzystanie nowych, planowanych linii?</li>
+                            <li>Jaki wpływ na rozkład jazdy będzie miało zamknięcie odcinka jezdni w centrum miasta?</li>
+                            <li>Jak zmieni się czas dojazdu do najważniejszych miejsc w regionie po zmianie tras linii?</li>
+                        </ul>
+                        
+                        <p>Na te, a także wiele innych pytań z łatwością odpowiesz wykorzystując Metropolis AI.</p>
+                    </div>
+                </div>
+                
+                <!-- PDF Page 3: Kim jesteśmy? -->
+                <div class="pdf-section">
+                    <h2 class="section-title">Kim jesteśmy?</h2>
+                    <div class="section-content">
+                        <p>Jesteśmy zespołem badaczy związanych z Instytutem Systemów Rozproszonych oraz Urządzeń Informatyki Wydziału Automatyki, Elektroniki i Informatyki Politechniki Śląskiej w Gliwicach.</p>
+                        
+                        <p>Zajmujemy się zastosowaniem nowoczesnych metod sztucznej inteligencji we flotach pojazdów przemysłowych oraz dronów. Posiadamy doświadczenie w tworzeniu rozwiązań dla wsparcia logistyki przemysłowej oraz obsługi rojów dronów realizujących zadania w terenie.</p>
+                        
+                        <p>Naszą misją jest zastosowanie rozwiązań znanych z przemysłu w aplikacjach dostępnych dla szerokiego grona odbiorców.</p>
+                    </div>
+                </div>
+                
+                <!-- PDF Page 4: Skład zespołu -->
+                <div class="pdf-section">
+                    <h2 class="section-title">Skład zespołu</h2>
+                    <div class="section-content">
+                        <div class="team-member">
+                            <p><strong>Dr hab. inż. Adam Domański, prof. Pol. Śl.</strong> - specjalista ds. telekomunikacji oraz modelowania statystycznego.</p>
+                        </div>
+                        <div class="team-member">
+                            <p><strong>Dr inż. Jakub Szyguła</strong> - specjalista ds. sztucznej inteligencji</p>
+                        </div>
+                        <div class="team-member">
+                            <p><strong>Dr inż. Dariusz Marek</strong> - specjalista ds. urządzeń autonomicznych</p>
+                        </div>
+                        <div class="team-member">
+                            <p><strong>Mgr inż. Karol Marszałek</strong> - specjalista ds. oprogramowania oraz architektury systemów analitycznych</p>
+                        </div>
+                        
+                        <div class="team-contact">
+                            <p><strong>Kontakt:</strong><br>
+                            jakub.szygula@polsl.pl<br>
+                            karol.marszalek@polsl.pl</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PDF Page 5: Jak to działa? -->
+                <div class="pdf-section">
+                    <h2 class="section-title">Jak to działa?</h2>
+                    <div class="section-content">
+                        <p>Nowoczesne systemu informatyczne udostępniają szczegółowe dane dotyczące tras przejazdu autobusów, tramwajów oraz pociągów.</p>
+                        
+                        <p>Wykorzystując te dane, możliwe jest stworzenie szczegółowych modeli statystycznych, szczegółowo opisujących funkcjonowanie systemu w warunkach normalnych oraz kryzysowych.</p>
+                        
+                        <p>Połączenie modeli statystycznych oraz algorytmów sztucznej inteligencji, możliwe jest przewidywanie skutków określonych działań na funkcjonowanie systemu komunikacji miejskiej. Dzięki temu możliwe jest szybkie udzielenie odpowiedzi na pytania, których ręczna analiza wymagałaby wielogodzinnej pracy ekspertów.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Poczekaj aż dokument zostanie w pełni załadowany
+        document.addEventListener('DOMContentLoaded', function() {
+            // Przycisk "Odkryj funkcjonalności" teraz przekierowuje bezpośrednio na zewnętrzny adres
+            const exploreBtn = document.getElementById('explore-btn');
+            const landingBackBtn = document.querySelector('.landing-back-btn');
+            
+            if (exploreBtn) {
+                exploreBtn.addEventListener('click', function(e) {
+                    // Zatrzymaj domyślną akcję tagu <a> (przekierowanie)
+                    e.preventDefault();
+                    
+                    // Przekieruj na określony adres URL
+                    window.location.href = 'https://metropolisai.pl/system';
+                });
+            }
+            
+            if (landingBackBtn) {
+                landingBackBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Możesz dodać akcję powrotu do strony głównej
+                    alert("Powrót do strony głównej");
+                });
+            }
+        });
+    </script>
+</body>
+</html>

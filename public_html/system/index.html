@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metropolis AI - System optymalizacji komunikacji</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            background-color: #f5f5f0;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* App Interface */
+        .app-interface {
+            display: block; /* Zmienione z 'none' na 'block', aby zawsze było widoczne */
+            min-height: 100vh;
+        }
+        
+        .app-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        
+        .app-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .back-btn {
+            padding: 8px 16px;
+            background-color: white;
+            color: #2c3e50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .app-content {
+            display: flex;
+            height: calc(100vh - 80px);
+            background-color: white;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .feature-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .feature-btn:hover, .feature-btn.active {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .feature-content {
+            display: none;
+        }
+        
+        .feature-content.active {
+            display: block;
+        }
+        
+        .feature-heading {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .feature-description {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .demo-image {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .kpi-cards {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            width: 30%;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .kpi-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .interactive-map {
+            width: 100%;
+            height: 400px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .action-btn.secondary {
+            background-color: #95a5a6;
+        }
+        
+        .action-btn.secondary:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- App Interface -->
+        <div class="app-interface" id="app-interface">
+            <div class="app-header">
+                <h1 class="app-title">Metropolis AI - System wspomagania decyzji</h1>
+                <a href="/" class="back-btn" id="back-btn">Powrót do strony głównej</a>
+            </div>
+            
+            <div class="app-content">
+                <div class="sidebar">
+                    <button class="feature-btn active" data-feature="overview">Przegląd systemu</button>
+                    <button class="feature-btn" data-feature="crisis">Zarządzanie sytuacjami kryzysowymi</button>
+                    <button class="feature-btn" data-feature="capacity">Analiza zapełnienia autobusów</button>
+                    <button class="feature-btn" data-feature="fleet">Optymalizacja floty</button>
+                    <button class="feature-btn" data-feature="seasonal">Planowanie sezonowe</button>
+                    <button class="feature-btn" data-feature="realtime">Adaptacja w czasie rzeczywistym</button>
+                    <button class="feature-btn" data-feature="optimization">Optymalizacja kosztowa</button>
+                    <button class="feature-btn" data-feature="infrastructure">Planowanie infrastrukturalne</button>
+                </div>
+                
+                <div class="main-content">
+                    <!-- Overview Feature -->
+                    <div class="feature-content active" id="overview">
+                        <h2 class="feature-heading">System wspomagania decyzji dla transportu publicznego</h2>
+                        <p class="feature-description">
+                            <strong>Metropolis AI</strong> to zaawansowane narzędzie stworzone z myślą o wsparciu operacyjnym i strategicznym dla instytucji zarządzających transportem publicznym. Rozwiązanie to wykorzystuje dane operacyjne, modele matematyczne oraz sztuczną inteligencję do precyzyjnego przewidywania skutków decyzji, ich optymalizacji oraz modelowania sytuacji kryzysowych.
+                        </p>
+                        
+                        <img src="sosnica.jpg" alt="Węzeł komunikacyjny Sośnica" style="width: 100%; max-width: 800px; height: auto; border-radius: 4px; margin: 20px 0; border: 1px solid #ddd;">
+                        
+                        <h3>Główne korzyści dla ZTM:</h3>
+                        <div class="kpi-cards">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Większa przewidywalność</div>
+                                <div class="kpi-value">+85%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Zmniejszenie ryzyka operacyjnego</div>
+                                <div class="kpi-value">-60%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Transparentność decyzji</div>
+                                <div class="kpi-value">100%</div>
+                            </div>
+                        </div>
+                        
+                        <p class="feature-description">
+                            Metropolis AI pozwala na planowanie działań w długim horyzoncie czasowym, a jednocześnie daje realne wsparcie decyzyjne w bieżących sytuacjach takich jak awarie, wypadki drogowe, zmienne warunki atmosferyczne czy wzmożony ruch pasażerski. Dzięki zastosowaniu modeli sztucznej inteligencji i symulacji zdarzeń, każda decyzja może być przetestowana przed jej wprowadzeniem, co znacząco ogranicza ryzyko błędów i kosztownych korekt.
+                        </p>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn">Prezentacja systemu</button>
+                            <button class="action-btn secondary">Kontakt z zespołem</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Crisis Management Feature -->
+<div class="feature-content" id="crisis">
+    <h2 class="feature-heading">Zarządzanie sytuacjami kryzysowymi</h2>
+    <p class="feature-description">
+        Moduł zarządzania kryzysowego pozwala na natychmiastową reakcję w przypadku nagłych zdarzeń blokujących ruch. System w ciągu kilku minut analizuje wszystkie możliwe scenariusze i proponuje optymalne rozwiązania, minimalizujące wpływ na pasażerów i koszty operacyjne.
+    </p>
+    
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="margin-bottom: 15px; color: #2c3e50;">Symulacja zamknięcia skrzyżowania</h3>
+        <p style="margin-bottom: 15px;">Wybierz skrzyżowanie lub odcinek drogi na mapie, aby zobaczyć natychmiastową analizę wpływu na sieć transportową. System przeprowadzi symulację i zaproponuje alternatywne trasy dla komunikacji miejskiej.</p>
+        
+        <h4 style="margin: 15px 0; color: #2c3e50;">Wybierz odcinek do zamknięcia:</h4>
+        <select style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: white;">
+            <option>Centrum miasta - Skrzyżowanie Al. Jerozolimskich i Marszałkowskiej</option>
+            <option>Trasa wylotowa wschód - Most Łazienkowski</option>
+            <option>Dzielnica północna - Ul. Słowackiego</option>
+            <option>Węzeł komunikacyjny południe - Rondo Wiatraczna</option>
+            <option>Dzielnica zachodnia - Al. Krakowska</option>
+        </select>
+        
+        <h4 style="margin: 15px 0; color: #2c3e50;">Przewidywany czas zamknięcia:</h4>
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Krótkotrwałe (do 2h)</button>
+            <button style="flex: 1; padding: 12px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Średniotrwałe (do 12h)</button>
+            <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">Długotrwałe (powyżej 12h)</button>
+        </div>
+        
+        <button style="width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 1.1rem;">Generuj scenariusze rozwiązań</button>
+    </div>
+    
+    <!-- Zwiększona wysokość obrazu z 300px na 400px -->
+    <div class="interactive-map" style="height: 400px; margin-bottom: 30px; overflow: hidden;">
+        <img src="korek.jpg" alt="Korek uliczny z zaznaczonym zamkniętym skrzyżowaniem i alternatywnymi trasami" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+    </div>
+    
+    <h3 style="margin: 30px 0 20px; color: #2c3e50;">Wyniki analizy</h3>
+    <div class="kpi-cards" style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+        <div class="kpi-card" style="flex: 1; text-align: center; padding: 20px; border: 1px solid #eee; border-radius: 8px; margin: 0 10px;">
+            <div class="kpi-value" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">18</div>
+            <div class="kpi-title" style="font-size: 1rem;">Linii wymagających zmiany trasy</div>
+        </div>
+        <div class="kpi-card" style="flex: 1; text-align: center; padding: 20px; border: 1px solid #eee; border-radius: 8px; margin: 0 10px;">
+            <div class="kpi-value" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">35 min</div>
+            <div class="kpi-title" style="font-size: 1rem;">Średnie wydłużenie czasu podróży</div>
+        </div>
+        <div class="kpi-card" style="flex: 1; text-align: center; padding: 20px; border: 1px solid #eee; border-radius: 8px; margin: 0 10px;">
+            <div class="kpi-value" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">12,500</div>
+            <div class="kpi-title" style="font-size: 1rem;">Szacowana liczba dotkniętych pasażerów</div>
+        </div>
+        <div class="kpi-card" style="flex: 1; text-align: center; padding: 20px; border: 1px solid #eee; border-radius: 8px; margin: 0 10px;">
+            <div class="kpi-value" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">8,900 zł</div>
+            <div class="kpi-title" style="font-size: 1rem;">Dodatkowy koszt operacyjny/godzinę</div>
+        </div>
+    </div>
+    
+    <h3 style="margin: 30px 0 20px; color: #2c3e50;">Rekomendowane działania</h3>
+    <p style="margin-bottom: 15px;">System Metropolis AI proponuje następujące rozwiązania:</p>
+    <ol style="margin-left: 20px; margin-bottom: 30px; line-height: 1.6;">
+        <li>Tymczasowe przekierowanie 18 linii przez alternatywne trasy</li>
+        <li>Uruchomienie 6 dodatkowych autobusów na objazdy</li>
+        <li>Tymczasowe zawieszenie 3 przystanków</li>
+        <li>Utworzenie tymczasowego węzła przesiadkowego przy ul. Nowogrodzkiej</li>
+        <li>Wysłanie powiadomień do 15,000 użytkowników aplikacji mobilnej</li>
+    </ol>
+    
+    <div class="action-buttons">
+        <button class="action-btn">Zastosuj rekomendacje</button>
+        <button class="action-btn secondary">Zapisz do analizy</button>
+        <button class="action-btn secondary">Wydrukuj raport</button>
+    </div>
+</div> 
+                    <!-- Capacity Analysis Feature -->
+<div class="feature-content" id="capacity">
+    <h2 class="feature-heading">Analiza zapełnienia autobusów</h2>
+    <p class="feature-description">
+        System analizuje dane historyczne oraz bieżące pomiary z czujników w autobusach, aby przewidywać zapełnienie pojazdów na poszczególnych odcinkach tras. Dzięki temu możliwa jest optymalizacja częstotliwości kursowania oraz wielkości taboru.
+    </p>
+    
+    <img src="ztm.jpg" alt="Wykres zapełnienia autobusów" class="demo-image">
+    
+    <div class="kpi-cards">
+        <div class="kpi-card">
+            <div class="kpi-title">Redukcja przepełnienia</div>
+            <div class="kpi-value">-38%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Optymalizacja taboru</div>
+            <div class="kpi-value">+25%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Zadowolenie pasażerów</div>
+            <div class="kpi-value">+42%</div>
+        </div>
+    </div>
+    
+    <p class="feature-description">
+        System odpowie na pytanie: "Jaki wpływ na zapełnienie autobusów będzie miało usunięcie istniejących linii?" oraz "Jakie będzie wykorzystanie nowych, planowanych linii?". Możliwa jest także symulacja różnych scenariuszy zmian w sieci komunikacyjnej.
+    </p>
+    
+    <div class="action-buttons">
+        <button class="action-btn">Analiza linii</button>
+        <button class="action-btn secondary">Symulacja zmian</button>
+    </div>
+</div>
+
+                    <!-- Seasonal Planning Feature -->
+                    <div class="feature-content" id="seasonal">
+                        <h2 class="feature-heading">Planowanie sezonowe</h2>
+                        <p class="feature-description">
+                            System pozwala na przygotowanie z odpowiednim wyprzedzeniem reorganizacji linii komunikacyjnych na różne okresy, takie jak wakacje, ferie, czy duże wydarzenia. Metropolis AI analizuje historyczne dane, trendy, a także prognozy dotyczące ruchu pasażerskiego, proponując najlepsze rozwiązania.
+                        </p>
+                        
+                        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h3 style="margin-bottom: 15px; color: #2c3e50;">Wybierz typ planowania:</h3>
+                            
+                            <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                                <button style="flex: 1; padding: 12px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; min-width: 150px; font-weight: 500;">Wakacje szkolne</button>
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; min-width: 150px; font-weight: 500;">Ferie zimowe</button>
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; min-width: 150px; font-weight: 500;">Długi weekend</button>
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; min-width: 150px; font-weight: 500;">Wydarzenie masowe</button>
+                            </div>
+                            
+                            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Data rozpoczęcia:</label>
+                                    <input type="date" value="2025-06-28" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: white;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Data zakończenia:</label>
+                                    <input type="date" value="2025-08-31" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: white;">
+                                </div>
+                            </div>
+                            
+                            <h3 style="margin: 20px 0 15px; color: #2c3e50;">Przewidywana zmiana natężenia ruchu:</h3>
+                            
+                            <div style="background-color: white; border-radius: 6px; padding: 15px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="font-weight: 500;">Centrum miasta:</span>
+                                    <span style="font-weight: 700; color: #e74c3c;">-35%</span>
+                                </div>
+                                <div style="height: 10px; background-color: #f0f0f0; border-radius: 5px; overflow: hidden;">
+                                    <div style="width: 35%; height: 100%; background-color: #e74c3c;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="background-color: white; border-radius: 6px; padding: 15px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="font-weight: 500;">Dzielnice mieszkaniowe:</span>
+                                    <span style="font-weight: 700; color: #e74c3c;">-25%</span>
+                                </div>
+                                <div style="height: 10px; background-color: #f0f0f0; border-radius: 5px; overflow: hidden;">
+                                    <div style="width: 25%; height: 100%; background-color: #e74c3c;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="background-color: white; border-radius: 6px; padding: 15px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="font-weight: 500;">Trasy rekreacyjne:</span>
+                                    <span style="font-weight: 700; color: #27ae60;">+40%</span>
+                                </div>
+                                <div style="height: 10px; background-color: #f0f0f0; border-radius: 5px; overflow: hidden;">
+                                    <div style="width: 40%; height: 100%; background-color: #27ae60;"></div>
+                                </div>
+                            </div>
+                            
+                            <button style="width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 1.1rem;">Wygeneruj plan sezonowy</button>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 20px; color: #2c3e50;">Wyniki analizy</h3>
+                        <div class="kpi-cards" style="margin-bottom: 30px;">
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">42</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Linie do ograniczenia częstotliwości</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">12</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Linie do zwiększenia częstotliwości</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">5</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Linie do tymczasowego zawieszenia</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">3</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Nowe linie sezonowe</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 20px; color: #2c3e50;">Rekomendowane działania</h3>
+                        <p style="margin-bottom: 15px;">System Metropolis AI proponuje następujące rozwiązania w okresie wakacyjnym:</p>
+                        <ol style="margin-left: 20px; margin-bottom: 30px; line-height: 1.6;">
+                            <li>Zmniejszenie częstotliwości kursowania na 42 liniach miejskich</li>
+                            <li>Zwiększenie kursów na trasach rekreacyjnych (12 linii)</li>
+                            <li>Uruchomienie 3 dodatkowych linii sezonowych do popularnych miejsc wypoczynku</li>
+                            <li>Tymczasowe zawieszenie 5 linii o najmniejszym natężeniu ruchu</li>
+                            <li>Redukcja zapotrzebowania na flotę o 68 pojazdów</li>
+                        </ol>
+                        
+                        <div class="kpi-cards" style="margin-bottom: 30px;">
+                            <div class="kpi-card" style="text-align: center; background-color: #eafaf1; border-color: #d5f5e3;">
+                                <div class="kpi-value" style="color: #27ae60;">-18%</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Redukcja kosztów operacyjnych</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center; background-color: #eafaf1; border-color: #d5f5e3;">
+                                <div class="kpi-value" style="color: #27ae60;">+5%</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Wskaźnik zadowolenia pasażerów</div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn">Zastosuj rekomendacje</button>
+                            <button class="action-btn secondary">Zapisz do analizy</button>
+                            <button class="action-btn secondary">Wydrukuj raport</button>
+                        </div>
+                    </div>
+                    
+<!-- Real-time Adaptation Feature -->
+<div class="feature-content" id="realtime">
+    <h2 class="feature-heading">Adaptacja w czasie rzeczywistym</h2>
+    <p class="feature-description">
+        System monitoruje bieżącą sytuację na drogach i trasach komunikacji miejskiej, reagując na nieprzewidziane zdarzenia. Dzięki integracji z systemami GPS, danymi z kamer oraz informacjami o warunkach pogodowych, może rekomendować zmiany w rozkładzie jazdy w czasie rzeczywistym.
+    </p>
+    
+    <img src="drogi.jpg" alt="Mapa miasta" class="demo-image">
+    
+    <div class="kpi-cards">
+        <div class="kpi-card">
+            <div class="kpi-title">Punktualność</div>
+            <div class="kpi-value">+28%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Czas reakcji</div>
+            <div class="kpi-value">45s</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Redukcja opóźnień</div>
+            <div class="kpi-value">-35%</div>
+        </div>
+    </div>
+    
+    <p class="feature-description">
+        System automatycznie wykrywa anomalie w ruchu drogowym i proponuje rozwiązania, takie jak zmiana trasy, dodanie dodatkowego pojazdu czy przekierowanie pasażerów na alternatywne połączenia. Wszystkie decyzje są podejmowane na podstawie aktualnych danych i modelowania predykcyjnego.
+    </p>
+    
+    <div class="action-buttons">
+        <button class="action-btn">Podgląd na żywo</button>
+        <button class="action-btn secondary">Historia adaptacji</button>
+    </div>
+</div>               
+
+
+<!-- Fleet Optimization Feature -->
+                    <div class="feature-content" id="fleet">
+                        <h2 class="feature-heading">Optymalizacja floty pojazdów</h2>
+                        <p class="feature-description">
+                            Moduł optymalizacji floty pozwala na precyzyjne określenie potrzebnej liczby pojazdów dla zachowania płynności ruchu, z uwzględnieniem różnych warunków i pór dnia. System analizuje historyczne dane o przepełnieniach i opóźnieniach, prognozując przyszłe zapotrzebowanie.
+                        </p>
+                        
+                        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <h3 style="margin-bottom: 15px; color: #2c3e50;">Parametry analizy</h3>
+                            
+                            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Dzień tygodnia:</label>
+                                    <select style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: white;">
+                                        <option>Poniedziałek</option>
+                                        <option selected>Wtorek</option>
+                                        <option>Środa</option>
+                                        <option>Czwartek</option>
+                                        <option>Piątek</option>
+                                        <option>Sobota</option>
+                                        <option>Niedziela</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Okres:</label>
+                                    <select style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: white;">
+                                        <option>Rok szkolny</option>
+                                        <option>Wakacje</option>
+                                        <option selected>Standardowy</option>
+                                        <option>Okres świąteczny</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <h3 style="margin: 15px 0; color: #2c3e50;">Wybierz czas analizy:</h3>
+                            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">4:00-8:00</button>
+                                <button style="flex: 1; padding: 12px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">7:00-9:00</button>
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">13:00-16:00</button>
+                                <button style="flex: 1; padding: 12px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">16:00-19:00</button>
+                            </div>
+                            
+                            <button style="width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 1.1rem;">Oblicz zapotrzebowanie</button>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 20px; color: #2c3e50;">Wyniki analizy</h3>
+                        <div class="kpi-cards" style="margin-bottom: 30px;">
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">376</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Wymagana liczba autobusów</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">94%</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Przewidywane wykorzystanie floty</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center;">
+                                <div class="kpi-value">18</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Liczba pojazdów w rezerwie</div>
+                            </div>
+                            <div class="kpi-card" style="text-align: center; background-color: #ffeaea; border-color: #ffcece;">
+                                <div class="kpi-value" style="color: #e74c3c;">8</div>
+                                <div class="kpi-title" style="font-size: 1rem;">Brakujące pojazdy</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 30px 0 20px; color: #2c3e50;">Rekomendowane działania</h3>
+                        <p style="margin-bottom: 15px;">System Metropolis AI proponuje następujące rozwiązania:</p>
+                        <ol style="margin-left: 20px; margin-bottom: 30px; line-height: 1.6;">
+                            <li>Zwiększenie częstotliwości na 12 głównych liniach w godzinach szczytu</li>
+                            <li>Przesunięcie pojazdów z tras o mniejszym natężeniu (5 linii)</li>
+                            <li>Uruchomienie 6 dodatkowych kursów ekspresowych</li>
+                            <li>Skorzystanie z 8 pojazdów rezerwy technicznej</li>
+                            <li>Odłożenie planowanych przeglądów technicznych dla 4 pojazdów</li>
+                        </ol>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn">Zastosuj rekomendacje</button>
+                            <button class="action-btn secondary">Zapisz do analizy</button>
+                            <button class="action-btn secondary">Wydrukuj raport</button>
+                        </div>
+                    </div>
+
+                    <!-- Cost Optimization Feature -->
+                    <div class="feature-content" id="optimization">
+                        <h2 class="feature-heading">Optymalizacja kosztowa</h2>
+                        <p class="feature-description">
+                            Moduł optymalizacji kosztowej pozwala na znalezienie optymalnego balansu między kosztami operacyjnymi a jakością usług transportowych. System analizuje zużycie paliwa, koszty osobowe, amortyzację taboru oraz przychody z biletów.
+                        </p>
+                        
+                        <img src="/api/placeholder/800/400" alt="Wykres optymalizacji kosztów" class="demo-image">
+                        
+                        <div class="kpi-cards">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Redukcja kosztów</div>
+                                <div class="kpi-value">-18%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Wzrost efektywności</div>
+                                <div class="kpi-value">+22%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">ROI wdrożenia</div>
+                                <div class="kpi-value">340%</div>
+                            </div>
+                        </div>
+                        
+                        <p class="feature-description">
+                            System identyfikuje nieefektywne kursy i proponuje alternatywne rozwiązania, takie jak zmiana typu pojazdu, modyfikacja częstotliwości czy optymalizacja tras. Wszystkie propozycje uwzględniają potrzeby pasażerów oraz ograniczenia techniczne i organizacyjne.
+                        </p>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn">Raport oszczędności</button>
+                            <button class="action-btn secondary">Symulacja optymalizacji</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Infrastructure Planning Feature -->
+                    <div class="feature-content" id="infrastructure">
+                        <h2 class="feature-heading">Planowanie infrastrukturalne</h2>
+                        <p class="feature-description">
+                            Moduł planowania infrastrukturalnego wspiera decyzje dotyczące lokalizacji nowych przystanków, zajezdni, węzłów przesiadkowych oraz innych elementów infrastruktury transportowej. System analizuje dane o przepływach pasażerów, dostępności gruntów oraz kosztach inwestycji.
+                        </p>
+                        
+                        <div class="interactive-map">
+                            [Mapa potencjalnych lokalizacji nowej infrastruktury]
+                        </div>
+                        
+                        <div class="kpi-cards">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Optymalizacja lokalizacji</div>
+                                <div class="kpi-value">+65%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Redukcja kosztów inwestycji</div>
+                                <div class="kpi-value">-25%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Wzrost dostępności</div>
+                                <div class="kpi-value">+40%</div>
+                            </div>
+                        </div>
+                        
+                        <p class="feature-description">
+                            System identyfikuje obszary z niedostateczną obsługą transportową oraz miejsca, gdzie modernizacja infrastruktury przyniesie największe korzyści. Analizy obejmują aktualne przepływy pasażerskie, prognozy demograficzne oraz plany rozwoju miasta.
+                        </p>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn">Analiza lokalizacji</button>
+                            <button class="action-btn secondary">Raport rozwoju</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Poczekaj aż dokument zostanie w pełni załadowany
+        document.addEventListener('DOMContentLoaded', function() {
+            // Feature navigation
+            const featureButtons = document.querySelectorAll('.feature-btn');
+            const featureContents = document.querySelectorAll('.feature-content');
+            
+            if (featureButtons.length > 0 && featureContents.length > 0) {
+                featureButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons and contents
+                        featureButtons.forEach(btn => {
+                            if (btn) btn.classList.remove('active');
+                        });
+                        featureContents.forEach(content => {
+                            if (content) content.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked button
+                        this.classList.add('active');
+                        
+                        // Show corresponding content
+                        const featureId = this.getAttribute('data-feature');
+                        const featureContent = document.getElementById(featureId);
+                        if (featureContent) {
+                            featureContent.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            // Simulate interactive maps and charts
+            const maps = document.querySelectorAll('.interactive-map');
+            if (maps.length > 0) {
+                maps.forEach(map => {
+                    if (map) {
+                        map.innerHTML = map.innerHTML + '<br>[Interaktywna wizualizacja - kliknij aby powiększyć]';
+                        map.style.cursor = 'pointer';
+                        
+                        map.addEventListener('click', function() {
+                            alert('Otwieranie pełnoekranowej wizualizacji...');
+                        });
+                    }
+                });
+            }
+            
+            // Action buttons interactions
+            const actionButtons = document.querySelectorAll('.action-btn');
+            if (actionButtons.length > 0) {
+                actionButtons.forEach(button => {
+                    if (button) {
+                        button.addEventListener('click', function() {
+                            alert('Funkcja w przygotowaniu: ' + this.textContent);
+                        });
+                    }
+                });
+            }
+            
+            // Dodatkowe interakcje dla formularzy
+            const formSelects = document.querySelectorAll('select');
+            if (formSelects.length > 0) {
+                formSelects.forEach(select => {
+                    if (select) {
+                        select.addEventListener('change', function() {
+                            console.log('Wybrano opcję: ' + this.value);
+                        });
+                    }
+                });
+            }
+            
+            const formInputs = document.querySelectorAll('input');
+            if (formInputs.length > 0) {
+                formInputs.forEach(input => {
+                    if (input) {
+                        input.addEventListener('change', function() {
+                            console.log('Zmieniono wartość: ' + this.value);
+                        });
+                    }
+                });
+            }
+            
+            const additionalButtons = document.querySelectorAll('button:not(.feature-btn):not(.action-btn):not(.back-btn)');
+            if (additionalButtons.length > 0) {
+                additionalButtons.forEach(button => {
+                    if (button) {
+                        button.addEventListener('click', function() {
+                            alert('Kliknięto: ' + this.textContent);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
