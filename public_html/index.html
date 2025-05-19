@@ -96,12 +96,12 @@
         
         /* Nowy styl przycisku, teraz centralnie pod tytułem */
         .explore-btn {
-            padding: 12px 24px;
+            padding: 36px 72px;
             background-color: #2c3e50;
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 3rem;
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 20px auto 40px auto;
@@ -194,12 +194,13 @@
             <div class="landing-header">
          
                 
-                <!-- Przycisk umieszczony bezpośrednio pod tytułem, przed obrazkami -->
-                <a href="https://metropolisai.pl/system" class="explore-btn" id="explore-btn">Odkryj funkcjonalności</a>
-                
                 <!-- Jedna duża grafika zamiast dwóch mniejszych -->
                 <img class="transport-image" src="grafika.jpg" alt="Transport miejski" width="800" height="300">
-           
+
+                <!-- Przycisk umieszczony bezpośrednio pod tytułem, przed obrazkami -->
+                <a href="https://metropolisai.pl/system" class="explore-btn" id="explore-btn">Odkryj funkcjonalności</a>
+
+
             </div>
                     
             <div class="pdf-content">
@@ -207,26 +208,50 @@
                 <div class="pdf-section">
                     <h2 class="section-title">Opis produktu</h2>
                     <div class="section-content">
-                        <p>Metropolis AI to system przewidujący skutki podejmowanych decyzji związanych z komunikacją miejską.</p>
+                        <p>&emsp;Metropolis AI pozwala na przewidywanie skutków podejmowanych decyzji związanych z zarządzaniem systemem komunikacji miejskiej.</p>
                         
                         <ul class="question-list">
                             <li>Jaki wpływ na zapełnienie autobusów będzie miało usunięcie istniejących linii?</li>
                             <li>Jakie będzie wykorzystanie nowych, planowanych linii?</li>
                             <li>Jaki wpływ na rozkład jazdy będzie miało zamknięcie odcinka jezdni w centrum miasta?</li>
                             <li>Jak zmieni się czas dojazdu do najważniejszych miejsc w regionie po zmianie tras linii?</li>
+                            <li>Jak rentowna będzie dana linia?</li>
                         </ul>
                         
                         <p>Na te, a także wiele innych pytań z łatwością odpowiesz wykorzystując Metropolis AI.</p>
                     </div>
                 </div>
-                
+
+                <!-- PDF Page 5: Jak to działa? -->
+                <div class="pdf-section">
+                    <h2 class="section-title">Jak to działa?</h2>
+                    <div class="section-content">
+                        <p>&emsp;Nowoczesne systemy informatyczne udostępniają szczegółowe dane dotyczące tras przejazdu autobusów, tramwajów oraz pociągów.
+                            Z ich użyciem możliwe jest stworzenie szczegółowych modeli statystycznych, pozwalających na precyzyjną predykcję skutków określonych zdarzeń
+                            na badany system.
+                        </p>
+                        <p>&emsp;Zastosowanie metod statystycznych umożliwia również oszacowanie skutków zdarzeń kryzysowych.
+                            Analizując scenariusz kryzysowy, taki jak zamknięcie kluczowego wiaduktu, mostu lub kilku istotnych skrzyżowań,
+                            system pozwala na szybkie opracowanie możliwie najlepszego planu awaryjnego. Możliwe jest również oszacowanie
+                            skutku takiego wydarzenia przed jego wystąpieniem, w celu sprawdzenia odporności systemu komunikacji miejskiej
+                            na awarię w kluczowym obszarze regionu.
+                        </p>
+                        <p>&emsp;W oparciu o wyniki symulacji statystycznej, algorytmy sztucznej inteligencji mogą zaproponować zarówno działania usprawniające
+                            funkcjonowanie systemu komunikacji miejskiej w warunkach normalnych, jak również znaleźć rozwiązanie sytuacji kryzysowej.
+                            Poprzez wbudowane mechanizmy samo-optymalizacji, zaproponowane rozwiązanie zostanie dostarczone wraz ze szczegółową analizą
+                            skutków jego wprowadzenia.
+                        </p>
+
+                    </div>
+                </div>
+
                 <!-- PDF Page 3: Kim jesteśmy? -->
                 <div class="pdf-section">
                     <h2 class="section-title">Kim jesteśmy?</h2>
                     <div class="section-content">
-                        <p>Jesteśmy zespołem badaczy związanych z Instytutem Systemów Rozproszonych oraz Urządzeń Informatyki Wydziału Automatyki, Elektroniki i Informatyki Politechniki Śląskiej w Gliwicach.</p>
+                        <p>&emsp;Jesteśmy zespołem badaczy związanych z Instytutem Systemów Rozproszonych oraz Urządzeń Informatyki Wydziału Automatyki, Elektroniki i Informatyki Politechniki Śląskiej w Gliwicach.</p>
                         
-                        <p>Zajmujemy się zastosowaniem nowoczesnych metod sztucznej inteligencji we flotach pojazdów przemysłowych oraz dronów. Posiadamy doświadczenie w tworzeniu rozwiązań dla wsparcia logistyki przemysłowej oraz obsługi rojów dronów realizujących zadania w terenie.</p>
+                        <p>&emsp;Zajmujemy się zastosowaniem nowoczesnych metod sztucznej inteligencji we flotach autonomicznych pojazdów przemysłowych oraz dronów. Posiadamy doświadczenie w tworzeniu rozwiązań dla wsparcia logistyki przemysłowej oraz obsługi rojów dronów realizujących zadania w terenie.</p>
                         
                         <p>Naszą misją jest zastosowanie rozwiązań znanych z przemysłu w aplikacjach dostępnych dla szerokiego grona odbiorców.</p>
                     </div>
@@ -237,16 +262,25 @@
                     <h2 class="section-title">Skład zespołu</h2>
                     <div class="section-content">
                         <div class="team-member">
-                            <p><strong>Dr hab. inż. Adam Domański, prof. Pol. Śl.</strong> - specjalista ds. telekomunikacji oraz modelowania statystycznego.</p>
+                            <p><strong>Dr hab. inż. Adam Domański, prof. Pol. Śl.</strong> - specjalista ds. telekomunikacji oraz modelowania statystycznego.
+                                Posiada wieloletnie, potwierdzone licznymi publikacjami, doświadczenie w zakresie tworzenia modeli statystycznych opisujących funkcjonowanie systemów rozproszonych oraz telekomunikacyjnych
+                            </p>
                         </div>
                         <div class="team-member">
-                            <p><strong>Dr inż. Jakub Szyguła</strong> - specjalista ds. sztucznej inteligencji</p>
+                            <p><strong>Dr inż. Jakub Szyguła</strong> - specjalista ds. sztucznej inteligencji.
+                                W ciągu ostatnich lat poświęcił się badaniom zastosowania sztucznej inteligencji w rojach dronów realizujących zadania na zadanym obszarze.
+                            </p>
                         </div>
                         <div class="team-member">
-                            <p><strong>Dr inż. Dariusz Marek</strong> - specjalista ds. urządzeń autonomicznych</p>
+                            <p><strong>Dr inż. Dariusz Marek</strong> - specjalista ds. urządzeń autonomicznych.
+                                Posiada komercyjne doświadczenie w zakresie rozwoju urządzeń autonomicznych, w szczególności systemów wizyjnych mających zastosowanie w dronach.
+                            </p>
                         </div>
                         <div class="team-member">
-                            <p><strong>Mgr inż. Karol Marszałek</strong> - specjalista ds. oprogramowania oraz architektury systemów analitycznych</p>
+                            <p><strong>Mgr inż. Karol Marszałek</strong> - specjalista ds. oprogramowania oraz architektury systemów analitycznych.
+                                Ekspert z zakresu inżynierii oprogramowania oraz architektury systemów analitycznych, posiadający wieloletnie doświadczenie współpracy z przemysłem.
+                                Posiada doświadczenie z zakresu tworzenia systemów zarządzania pojazdami autonomicznymi wspomagających całodobową pracę fabryk.
+                            </p>
                         </div>
                         
                         <div class="team-contact">
@@ -257,17 +291,6 @@
                     </div>
                 </div>
                 
-                <!-- PDF Page 5: Jak to działa? -->
-                <div class="pdf-section">
-                    <h2 class="section-title">Jak to działa?</h2>
-                    <div class="section-content">
-                        <p>Nowoczesne systemu informatyczne udostępniają szczegółowe dane dotyczące tras przejazdu autobusów, tramwajów oraz pociągów.</p>
-                        
-                        <p>Wykorzystując te dane, możliwe jest stworzenie szczegółowych modeli statystycznych, szczegółowo opisujących funkcjonowanie systemu w warunkach normalnych oraz kryzysowych.</p>
-                        
-                        <p>Połączenie modeli statystycznych oraz algorytmów sztucznej inteligencji, możliwe jest przewidywanie skutków określonych działań na funkcjonowanie systemu komunikacji miejskiej. Dzięki temu możliwe jest szybkie udzielenie odpowiedzi na pytania, których ręczna analiza wymagałaby wielogodzinnej pracy ekspertów.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
